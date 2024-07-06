@@ -12,8 +12,34 @@
     <link rel="stylesheet" href="{{ asset('assets/template/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/custom_datepicker_style.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/auth/css/custom_style.css') }}">
+    <style>
+        .form-control { border-radius: 2px !important; }
+        footer {
+            text-align: center;
+            padding: 1em;
+            background-color: transpent;
+            bottom: 0;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            footer {
+                font-size: 0.8em;
+            }
+        }
+
+        @media (min-width: 769px) {
+            footer {
+                font-size: 1em;
+            }
+        }
+        .btn-primary {
+    background-color: #F6A5BB;
+    border: none;
+}
+</style>
 </head>
-<body>
+<body style="background-color: #FAE6E7;">
     <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
         <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
             <div class="d-flex align-items-center justify-content-center w-100 py-5">
@@ -191,6 +217,9 @@
             </div>
         </div>
     </div>
+    <footer class="text-center mt-4">
+        <p>Menstrual Monitoring App v2</p>
+    </footer>
 
     <script src="{{ asset('assets/auth/libs/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/auth/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
