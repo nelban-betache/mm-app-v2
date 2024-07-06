@@ -141,7 +141,7 @@
                                                     @endif
                                                 </div>
 
-                                                <!-- <div class="col-lg-6 col-sm-12 mb-4">
+                                                <div class="col-lg-6 col-sm-12 mb-4">
                                                     <label for="contact_no" class="form-label">Contact No.</label>
                                                     <div class="input-group">
                                                         <span class="input-addon px-2 rounded-start-1 border border-end-0 d-flex align-items-center justify-content-center" id="basic-addon1">+63</span>
@@ -153,7 +153,7 @@
                                                             <strong>{{ $errors->first('contact_no') }}</strong>
                                                         </span>
                                                     @endif
-                                                </div> -->
+                                                </div>
                                             </div>
 
                                             <div class="mb-4">
