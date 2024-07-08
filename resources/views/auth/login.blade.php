@@ -15,7 +15,6 @@
             text-align: center;
             padding: 1em;
             background-color: transpent;
-            position: fixed;
             bottom: 0;
             width: 100%;
         }
