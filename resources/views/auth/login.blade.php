@@ -11,29 +11,9 @@
 
         <style>
         .form-control { border-radius: 2px !important; }
-        footer {
-            text-align: center;
-            padding: 1em;
-            background-color: transpent;
-            bottom: 0;
-            width: 100%;
-        }
-
-        @media (max-width: 768px) {
-            footer {
-                font-size: 0.8em;
-            }
-        }
-
-        @media (min-width: 769px) {
-            footer {
-                font-size: 1em;
-            }
-        }
-        .btn-primary {
-    background-color: #F6A5BB;
-    border: none;
-}
+        .btn-primary { background-color: #F6A5BB;
+                       border: none;
+           }
     </style>
 
 </head>
@@ -129,9 +109,6 @@
             </div>
         </div>
     </div>
-    <footer class="text-center mt-4">
-        <p>Menstrual Monitoring App v2</p>
-    </footer>
 
     <script src="{{ asset('assets/auth/libs/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/auth/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
