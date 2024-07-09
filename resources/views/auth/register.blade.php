@@ -191,7 +191,7 @@
 
                                             <div class="row">
                                                <div class="col-md-6 col-lg-6 col-sm-12 mb-4">
-                                                 <label for="role" class="form-label">Role</label>
+                                                 <label for="role" class="form-label">Register As</label>
                                                    <select class="form-control" name="role" id="role">
                                                      <option value="" selected disabled>-- Select --</option>
                                                      <option value="Feminine">Feminine</option>
@@ -199,7 +199,6 @@
                                                    </select>
                                                 </div>
                                             </div>
-                                            <input type="hidden" name="is_health_worker" id="is_health_worker" value="false">
 
                                                   <!-- FEMININE -->
                                             <div id="menstruation-status-fields" style="display: none;">
