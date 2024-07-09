@@ -188,7 +188,6 @@
                                                    </small>
                                                   </div>
                                             </div>  
-                                            <input type="hidden" name="is_health_worker" id="is_health_worker" value="false">
 
                                             <div class="row">
                                                <div class="col-md-6 col-lg-6 col-sm-12 mb-4">
@@ -200,6 +199,7 @@
                                                    </select>
                                                 </div>
                                             </div>
+                                            <input type="hidden" name="is_health_worker" id="is_health_worker" value="false">
 
                                                   <!-- FEMININE -->
                                             <div id="menstruation-status-fields" style="display: none;">
