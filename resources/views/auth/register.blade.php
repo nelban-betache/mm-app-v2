@@ -178,59 +178,38 @@
                                                 @endif
                                             </div>
 
-                                             
-                                            <div class="alert alert-primary" role="alert">
-                                                <h5>Select your Role</h5>
-                                                 <div class="col-12 mt-2 ml-2">
-                                                   <small id="role_help" class="form-text text-muted">
-                                                    <li><span class="fw-bolder">Feminine</span> - If you are feminine</li>
-                                                    <li><span class="fw-bolder">Health Worker</span> - If you are health worker</li>
-                                                   </small>
-                                                  </div>
-                                            </div>  
+                                            <div class="form-group row">
+                                              <label for="role" class="col-md-4 col-form-label text-md-right">{{ __('Role') }}</label>
 
-                                            <div class="row">
-                                               <div class="col-md-6 col-lg-6 col-sm-12 mb-4">
-                                                   <label for="role" class="form-label">Register As</label>
-                                                   <select class="form-control{{ $errors->has('role') ? ' is-invalid' : '' }}" name="role" id="role" required>
-                                                      <option value="" selected disabled>-- Select --</option>
-                                                      <option value="Health Worker" {{ old('role') == 'Health Worker' ? 'selected' : '' }}>Health Worker</option>
-                                                      <option value="Feminine" {{ old('role') == 'Feminine' ? 'selected' : '' }}>Feminine</option>
-                                                    </select>
-                                                    @if ($errors->has('role'))
-                                                     <span class="invalid-feedback">
-                                                       <strong>{{ $errors->first('role') }}</strong>
-                                                       </span>
-                                                     @endif
-                                            </div>
+                                              <div class="col-md-6">
+                                                <select id="role" class="form-control @error('role') is-invalid @enderror" name="role" required>
+                                                  <option value="Health Worker">Health Worker</option>
+                                                  <option value="Feminine">Feminine</option>
+                                              </select>
+                                               @error('role')
+                                               <span class="invalid-feedback" role="alert">
+                                                 <strong>{{ $message }}</strong>
+                                              </span>
+                                             @enderror
+                                           </div>
+                                        </div>    
 
-                                                  <!-- FEMININE -->
-                                            <div id="menstruation-status-fields" style="display: none;">
-                                               <div class="alert alert-primary" role="alert">
-                                                 <h5>Select your current menstruation status</h5>
-                                                  <div class="col-12 mt-2 ml-2">
-                                                   <small id="menstruation_help" class="form-text text-muted">
-                                                    <li><span class="fw-bolder">Active</span> - Your menstruation is active and is not pregnant</li>
-                                                    <li><span class="fw-bolder">Inactive</span> - Your menstruation is not active and might be pregnant or delayed</li>
-                                                   </small>
-                                                  </div>
-                                             </div>
+                        <div class="form-group row" id="menstruation-status-group">
+                            <label for="menstruation_status" class="col-md-4 col-form-label text-md-right">{{ __('Menstruation Status') }}</label>
 
-                                            <div class="mb-4 col-md-6 col-lg-6 col-sm-12 p-0">
-                                                 <label for="menstruation_status" class="form-label">Menstruation Status</label>
-                                                   <select class="form-control" name="menstruation_status" id="menstruation_status">
-                                                    <option value="" hidden>-- Select --</option>
-                                                    <option value="1">Active</option>
-                                                    <option value="0">Inactive</option>
-                                                  </select>
+                            <div class="col-md-6">
+                                <select id="menstruation_status" class="form-control @error('menstruation_status') is-invalid @enderror" name="menstruation_status" required>
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
 
-                                           @if ($errors->has('menstruation_status'))
-                                                <span class="invalid-feedback">
-                                                <strong>{{ $errors->first('menstruation_status') }}</strong>
-                                                </span>
-                                              @endif
-                                              </div>
-                                            </div>
+                                @error('menstruation_status')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
 
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <span>Already have an account? <a class="text-primary fw-bold" href="{{ route('login') }}">Sign in</a></span>
@@ -280,25 +259,22 @@
             input.value = phoneNumber;
         }
     </script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const roleSelect = document.getElementById('role');
-        const menstruationFields = document.getElementById('menstruation-status-fields');
-        const menstruationStatusSelect = document.getElementById('menstruation_status');
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const roleField = document.getElementById('role');
+    const menstruationStatusGroup = document.getElementById('menstruation-status-group');
 
-        roleSelect.addEventListener('change', function() {
-            const selectedRole = roleSelect.value;
-            if (selectedRole === 'Feminine') {
-                menstruationFields.style.display = 'block';
-                // Reset menstruation status dropdown
-                menstruationStatusSelect.selectedIndex = 0;
-            } else {
-                menstruationFields.style.display = 'none';
-                // Reset menstruation status dropdown
-                menstruationStatusSelect.selectedIndex = 0;
-            }
-        });
-    });
-</script> 
+    function toggleMenstruationStatus() {
+        if (roleField.value === 'Health Worker') {
+            menstruationStatusGroup.style.display = 'none';
+        } else {
+            menstruationStatusGroup.style.display = 'block';
+        }
+    }
+
+    roleField.addEventListener('change', toggleMenstruationStatus);
+    toggleMenstruationStatus(); // Initial call
+});
+</script>
 </body>
 </html>
