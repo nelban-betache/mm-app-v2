@@ -51,4 +51,25 @@ class Controller extends BaseController
                 'users.last_name',
                 'users.middle_name']);
     }
+    protected function create(array $data)
+{
+    // Default role
+    $role = 'User'; // Adjust as per your default role
+
+    // Check if role is specified and valid
+    if (isset($data['role']) && in_array($data['role'], ['Feminine', 'Health Worker'])) {
+        $role = $data['role'];
+    }
+
+    return User::create([
+        'first_name' => $data['first_name'],
+        'last_name' => $data['last_name'],
+        'email' => $data['email'],
+        'password' => Hash::make($data['password']),
+        'role' => $role,
+        'menstruation_status' => $data['menstruation_status'] ?? null,
+        // Add more fields as needed
+    ]);
+}
+
 }
