@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
-use App\Models\User;
 
 class RegisterController extends Controller
 {
@@ -48,7 +49,7 @@ class RegisterController extends Controller
             // Determine default values based on role
             $defaultMenstruationStatus = $role === 'Feminine' ? $data['menstruation_status'] : null;
             $userRoleId = $role === 'Health Worker' ? 3 : 2; // 3 for Health Worker, 2 for User
-            $isActive = $role === 'Health Worker' ? false : true; // Health Workers are inactive by default
+            $isActive = false; // All users are inactive by default
 
             $user = User::create([
                 'first_name' => $data['first_name'],
@@ -64,22 +65,24 @@ class RegisterController extends Controller
                 'is_active' => $isActive,
             ]);
 
-            $this->registered();
+            Log::info('User registration successful: ' . $user->id);
 
-            return $user;
+            return $this->registered($user);
         } catch (\Exception $e) {
-            // Handle any exceptions during registration
+            Log::error('Error during registration: ' . $e->getMessage());
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
 
-    protected function registered()
+    protected function registered($user)
     {
         Session::flush(); // Flush any existing session data
         Auth::logout(); // Logout the user after registration
 
         // Flash a message to the user
         Session::flash('post-register', 'Registration completed! Please wait for the admin to verify your account.');
+
+        Log::info('Redirecting to login page after registration.');
 
         // Redirect the user to the login page
         return redirect()->route('login');
