@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Validation\Rule;
+
+use App\Models\User;
+
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 
-use App\Models\User;
+use Session;
 
 class RegisterController extends Controller
 {
@@ -54,16 +58,14 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'middle_name' => ['nullable', 'string', 'max:255'],
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'contact_no' => ['nullable', 'numeric', 'regex:/^\d{10,11}$/'],
-            'address' => ['nullable', 'string', 'max:255'],
+            'menstruation_status' => ['required', 'boolean'],
             'birthdate' => ['required', 'date', 'before:today'],
-            'role' => ['required', 'string', 'in:Health Worker,Feminine'],
-            'menstruation_status' => ['required_if:role,Feminine', 'boolean'],
+            'contact_no' => ['numeric', 'nullable', 'regex:/^\d{10,11}$/', 'unique:users,contact_no', 'required_if:email,null'],
         ], [
             'contact_no.regex' => 'The contact number must be 10 or 11 digits.',
+            'contact_no.unique' => 'The contact number has already been taken.',
             'unique' => 'The :attribute field has already been taken.'
         ]);
     }
@@ -74,23 +76,9 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create(array $data)
-    {
+    protected function create(array $data) {
         try {
-            $role = $data['role'];
-    
-            // Determine default values based on role
-            $defaultMenstruationStatus = null;
-            $userRoleId = $role === 'Health Worker' ? 3 : 2; // 3 for Health Worker, 2 for User
-            $isActive = true; // Default to active unless specified otherwise
-    
-            if ($role === 'Feminine') {
-                $defaultMenstruationStatus = $data['menstruation_status'];
-            } elseif ($role === 'Health Worker') {
-                $isActive = false; // Health Workers are inactive by default
-            }
-    
-            $user = User::create([
+            return User::create([
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
                 'middle_name' => $data['middle_name'] ?? null,
@@ -99,35 +87,24 @@ class RegisterController extends Controller
                 'address' => $data['address'] ?? null,
                 'birthdate' => date('Y-m-d', strtotime($data['birthdate'])),
                 'password' => Hash::make($data['password']),
-                'menstruation_status' => $defaultMenstruationStatus,
-                'user_role_id' => $userRoleId,
-                'is_active' => $isActive,
+                'menstruation_status' => $data['menstruation_status'],
+                'user_role_id ' => 2, // 2 = default for user only role
+                'is_active' => false, // inactive by default, need to be verified by admin
             ]);
-    
-            $this->registered();
-    
-            return $user;
-        } catch (\Exception $e) {
-            // Handle any exceptions during registration
+
+            return $this->registered();
+        }
+        catch(\Exception $e) {
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
-    
-    /**
-     * Handle a registration request for the application.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    protected function registered()
-    {
-        Session::flush(); // Flush any existing session data
-        Auth::logout(); // Logout the user after registration
 
-        // Flash a message to the user
+    protected function registered() {
+        Session::flush();
+        Auth::logout();
+
         Session::flash('post-register', 'Registration completed! Please wait for the admin to verify your account.');
 
-        // Redirect the user to the login page
         return redirect()->route('login.page');
     }
 }
