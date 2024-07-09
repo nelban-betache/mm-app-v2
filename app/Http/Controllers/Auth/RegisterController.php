@@ -80,8 +80,15 @@ class RegisterController extends Controller
             $role = $data['role'];
     
             // Determine default values based on role
-            $defaultMenstruationStatus = $role === 'Feminine' ? $data['menstruation_status'] : null;
+            $defaultMenstruationStatus = null;
             $userRoleId = $role === 'Health Worker' ? 3 : 2; // 3 for Health Worker, 2 for User
+            $isActive = true; // Default to active unless specified otherwise
+    
+            if ($role === 'Feminine') {
+                $defaultMenstruationStatus = $data['menstruation_status'];
+            } elseif ($role === 'Health Worker') {
+                $isActive = false; // Health Workers are inactive by default
+            }
     
             $user = User::create([
                 'first_name' => $data['first_name'],
@@ -94,7 +101,7 @@ class RegisterController extends Controller
                 'password' => Hash::make($data['password']),
                 'menstruation_status' => $defaultMenstruationStatus,
                 'user_role_id' => $userRoleId,
-                'is_active' => $role === 'Feminine' ? $data['is_active'] : true, // Active by default for non-Feminine roles
+                'is_active' => $isActive,
             ]);
     
             $this->registered();
