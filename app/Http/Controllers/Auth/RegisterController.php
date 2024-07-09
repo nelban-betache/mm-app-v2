@@ -94,7 +94,7 @@ class RegisterController extends Controller
                 'password' => Hash::make($data['password']),
                 'menstruation_status' => $defaultMenstruationStatus,
                 'user_role_id' => $userRoleId,
-                'is_active' => false, // inactive by default, needs to be verified by admin
+                'is_active' => $role === 'Feminine' ? $data['is_active'] : true, // Active by default for non-Feminine roles
             ]);
     
             $this->registered();
