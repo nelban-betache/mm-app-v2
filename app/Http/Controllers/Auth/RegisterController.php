@@ -24,6 +24,8 @@ class RegisterController extends Controller
 
     protected function validator(array $data)
     {
+        Log::info('Validating user data:', $data);
+
         return Validator::make($data, [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
@@ -43,18 +45,16 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         try {
-            Log::info('Starting user creation.');
+            Log::info('Creating user:', $data);
 
             $role = $data['role'];
-            Log::info('Role: ' . $role);
+            Log::info('Role:', ['role' => $role]);
 
-            // Determine default values based on role
             $defaultMenstruationStatus = $role === 'Feminine' ? $data['menstruation_status'] : null;
             $userRoleId = $role === 'Health Worker' ? 3 : 2; // 3 for Health Worker, 2 for User
-            $isActive = false; // All users are inactive by default
 
-            Log::info('Default Menstruation Status: ' . json_encode($defaultMenstruationStatus));
-            Log::info('User Role ID: ' . $userRoleId);
+            Log::info('Default Menstruation Status:', ['status' => $defaultMenstruationStatus]);
+            Log::info('User Role ID:', ['user_role_id' => $userRoleId]);
 
             $user = User::create([
                 'first_name' => $data['first_name'],
@@ -67,29 +67,27 @@ class RegisterController extends Controller
                 'password' => Hash::make($data['password']),
                 'menstruation_status' => $defaultMenstruationStatus,
                 'user_role_id' => $userRoleId,
-                'is_active' => $isActive,
+                'is_active' => false,
             ]);
 
-            Log::info('User created successfully: ' . $user->id);
+            Log::info('User created successfully:', ['user_id' => $user->id]);
 
             return $this->registered($user);
         } catch (\Exception $e) {
-            Log::error('Error during registration: ' . $e->getMessage());
+            Log::error('Error during registration:', ['message' => $e->getMessage()]);
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
 
     protected function registered($user)
     {
-        Session::flush(); // Flush any existing session data
-        Auth::logout(); // Logout the user after registration
+        Session::flush();
+        Auth::logout();
 
-        // Flash a message to the user
         Session::flash('post-register', 'Registration completed! Please wait for the admin to verify your account.');
 
         Log::info('Redirecting to login page after registration.');
 
-        // Redirect the user to the login page
         return redirect()->route('login');
     }
 }
