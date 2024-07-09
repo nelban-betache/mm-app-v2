@@ -197,9 +197,9 @@
                                                      <option value="Health Worker">Health Worker</option>
                                                      <option value="Feminine">Feminine</option>
                                                    </select>
-                                                   @if ('role')
+                                                   @if ($errors->has('role'))
                                                         <span class="invalid-feedback">
-                                                            <strong>{{$message}}</strong>
+                                                            <strong>{{ $errors->first('role') }}</strong>
                                                         </span>
                                                     @endif
                                                 </div>
