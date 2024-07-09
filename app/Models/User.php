@@ -21,15 +21,15 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'middle_name',
+        'address',
         'email',
         'contact_no',
-        'address',
         'birthdate',
         'password',
         'menstruation_status',
         'user_role_id',
         'is_active',
-        'role', // Ensure 'role' is added here if it's in your schema
+        'remarks'
     ];
 
     /**
