@@ -55,15 +55,21 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
+        $rules = [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'menstruation_status' => ['required', 'boolean'],
             'birthdate' => ['required', 'date', 'before:today'],
             'contact_no' => ['numeric', 'nullable', 'regex:/^\d{10,11}$/', 'unique:users,contact_no', 'required_if:email,null'],
-        ], [
+        ];
+
+        // Add validation rule for menstruation_status if applicable
+        if ($data['role'] == 'Feminine') {
+            $rules['menstruation_status'] = ['required', 'boolean'];
+        }
+
+        return Validator::make($data, $rules, [
             'contact_no.regex' => 'The contact number must be 10 or 11 digits.',
             'contact_no.unique' => 'The contact number has already been taken.',
             'unique' => 'The :attribute field has already been taken.'
@@ -76,8 +82,16 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create(array $data) {
+    protected function create(array $data)
+    {
         try {
+            // Determine user_role_id based on selected role
+            if ($data['role'] == 'Health Worker') {
+                $userRoleId = 3; // Assuming 3 is the ID for Health Worker
+            } else {
+                $userRoleId = 2; // Default ID for regular users
+            }
+
             return User::create([
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
@@ -87,14 +101,13 @@ class RegisterController extends Controller
                 'address' => $data['address'] ?? null,
                 'birthdate' => date('Y-m-d', strtotime($data['birthdate'])),
                 'password' => Hash::make($data['password']),
-                'menstruation_status' => $data['menstruation_status'],
-                'user_role_id ' => 2, // 2 = default for user only role
-                'is_active' => false, // inactive by default, need to be verified by admin
+                'menstruation_status' => $data['menstruation_status'] ?? null,
+                'user_role_id' => $userRoleId, // Assigning user role ID
+                'is_active' => false, // Inactive by default, requires admin verification
             ]);
 
             return $this->registered();
-        }
-        catch(\Exception $e) {
+        } catch (\Exception $e) {
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
