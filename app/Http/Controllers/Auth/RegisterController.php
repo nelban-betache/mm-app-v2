@@ -78,11 +78,11 @@ class RegisterController extends Controller
     {
         try {
             $role = $data['role'];
-
+    
             // Determine default values based on role
             $defaultMenstruationStatus = $role === 'Feminine' ? $data['menstruation_status'] : null;
             $userRoleId = $role === 'Health Worker' ? 3 : 2; // 3 for Health Worker, 2 for User
-
+    
             $user = User::create([
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
@@ -96,16 +96,16 @@ class RegisterController extends Controller
                 'user_role_id' => $userRoleId,
                 'is_active' => false, // inactive by default, needs to be verified by admin
             ]);
-
+    
             $this->registered();
-
+    
             return $user;
         } catch (\Exception $e) {
             // Handle any exceptions during registration
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
-
+    
     /**
      * Handle a registration request for the application.
      *
