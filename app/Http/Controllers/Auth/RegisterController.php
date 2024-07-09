@@ -54,21 +54,27 @@ class RegisterController extends Controller
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'menstruation_status' => ['required', 'boolean'],
-            'birthdate' => ['required', 'date', 'before:today'],
-            'contact_no' => ['numeric', 'nullable', 'regex:/^\d{10,11}$/', 'unique:users,contact_no', 'required_if:email,null'],
-        ], [
-            'contact_no.regex' => 'The contact number must be 10 or 11 digits.',
-            'contact_no.unique' => 'The contact number has already been taken.',
-            'unique' => 'The :attribute field has already been taken.'
-        ]);
-    }
+{
+    return Validator::make($data, [
+        'first_name' => ['required', 'string', 'max:255'],
+        'last_name' => ['required', 'string', 'max:255'],
+        'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
+        'password' => ['required', 'string', 'min:6', 'confirmed'],
+        'menstruation_status' => [
+            Rule::requiredIf(function () use ($data) {
+                return isset($data['role']) && $data['role'] === 'Feminine';
+            }),
+            'boolean'
+        ],
+        'birthdate' => ['required', 'date', 'before:today'],
+        'contact_no' => ['numeric', 'nullable', 'regex:/^\d{10,11}$/', 'unique:users,contact_no', 'required_if:email,null'],
+    ], [
+        'contact_no.regex' => 'The contact number must be 10 or 11 digits.',
+        'contact_no.unique' => 'The contact number has already been taken.',
+        'unique' => 'The :attribute field has already been taken.'
+    ]);
+}
+
 
     /**
      * Create a new user instance after a valid registration.
@@ -78,6 +84,8 @@ class RegisterController extends Controller
      */
     protected function create(array $data) {
         try {
+            $userRole = $data['role'] === 'Health Worker' ? 3 : 2;
+    
             return User::create([
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
@@ -87,17 +95,17 @@ class RegisterController extends Controller
                 'address' => $data['address'] ?? null,
                 'birthdate' => date('Y-m-d', strtotime($data['birthdate'])),
                 'password' => Hash::make($data['password']),
-                'menstruation_status' => $data['menstruation_status'],
-                'user_role_id ' => 2, // 2 = default for user only role
-                'is_active' => false, // inactive by default, need to be verified by admin
+                'menstruation_status' => $userRole == 3 ? null : $data['menstruation_status'],
+                'user_role_id' => $userRole,
+                'is_active' => false,
             ]);
-
+    
             return $this->registered();
-        }
-        catch(\Exception $e) {
+        } catch (\Exception $e) {
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
+    
 
     protected function registered() {
         Session::flush();

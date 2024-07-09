@@ -191,17 +191,18 @@
 
                                             <div class="row">
                                                <div class="col-md-6 col-lg-6 col-sm-12 mb-4">
-                                                   <label for="role" class="form-label">Register As</label>
-                                                   <select class="form-control{{ $errors->has('role') ? ' is-invalid' : '' }}" name="role" id="role" required>
-                                                      <option value="" selected disabled>-- Select --</option>
-                                                      <option value="Health Worker" {{ old('role') == 'Health Worker' ? 'selected' : '' }}>Health Worker</option>
-                                                      <option value="Feminine" {{ old('role') == 'Feminine' ? 'selected' : '' }}>Feminine</option>
-                                                    </select>
-                                                    @if ($errors->has('role'))
-                                                     <span class="invalid-feedback">
-                                                       <strong>{{ $errors->first('role') }}</strong>
-                                                       </span>
-                                                     @endif
+                                                 <label for="role" class="form-label">Register As</label>
+                                                   <select class="form-control" name="role" id="role">
+                                                     <option value="" selected disabled>-- Select --</option>
+                                                     <option value="Health Worker">Health Worker</option>
+                                                     <option value="Feminine">Feminine</option>
+                                                   </select>
+                                                   @if ($errors->has('role'))
+                                                        <span class="invalid-feedback">
+                                                            <strong>{{ $errors->first('role') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
                                             </div>
 
                                                   <!-- FEMININE -->
@@ -281,24 +282,26 @@
         }
     </script>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const roleSelect = document.getElementById('role');
-        const menstruationFields = document.getElementById('menstruation-status-fields');
-        const menstruationStatusSelect = document.getElementById('menstruation_status');
+document.addEventListener('DOMContentLoaded', function() {
+    const roleSelect = document.getElementById('role');
+    const menstruationFields = document.getElementById('menstruation-status-fields');
+    const menstruationStatusSelect = document.getElementById('menstruation_status');
 
-        roleSelect.addEventListener('change', function() {
-            const selectedRole = roleSelect.value;
-            if (selectedRole === 'Feminine') {
-                menstruationFields.style.display = 'block';
-                // Reset menstruation status dropdown
-                menstruationStatusSelect.selectedIndex = 0;
-            } else {
-                menstruationFields.style.display = 'none';
-                // Reset menstruation status dropdown
-                menstruationStatusSelect.selectedIndex = 0;
-            }
-        });
+    roleSelect.addEventListener('change', function() {
+        const selectedRole = roleSelect.value;
+        if (selectedRole === 'Feminine') {
+            menstruationFields.style.display = 'block';
+            menstruationStatusSelect.required = true;
+            // Reset menstruation status dropdown
+            menstruationStatusSelect.selectedIndex = 0;
+        } else {
+            menstruationFields.style.display = 'none';
+            menstruationStatusSelect.required = false;
+            // Reset menstruation status dropdown
+            menstruationStatusSelect.selectedIndex = 0;
+        }
     });
-</script> 
+});
+
 </body>
 </html>
