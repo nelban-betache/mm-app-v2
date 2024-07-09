@@ -51,4 +51,55 @@ class Controller extends BaseController
                 'users.last_name',
                 'users.middle_name']);
     }
+
+    public function showRegistrationForm()
+    {
+        return view('auth.register');
+    }
+
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        $user = $this->create($request->all());
+
+        // Optionally log the user in
+        // auth()->login($user);
+
+        return redirect()->route('login')->with('success', 'Registration successful! Please log in.');
+    }
+
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'first_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['nullable', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
+            'birthdate' => ['required', 'date'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'contact_no' => ['required', 'string', 'max:10'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'role' => ['required', 'string', 'in:Feminine,Health Worker'],
+        ]);
+    }
+
+    protected function create(array $data)
+    {
+        $role = $data['role'] === 'Health Worker' ? 3 : 2; // Adjust role IDs accordingly
+
+        return User::create([
+            'first_name' => $data['first_name'],
+            'middle_name' => $data['middle_name'],
+            'last_name' => $data['last_name'],
+            'address' => $data['address'],
+            'birthdate' => $data['birthdate'],
+            'email' => $data['email'],
+            'contact_no' => $data['contact_no'],
+            'password' => Hash::make($data['password']),
+            'user_role_id' => $role,
+        ]);
+    }
+
+
 }
