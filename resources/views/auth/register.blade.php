@@ -188,7 +188,7 @@
                                                    </small>
                                                   </div>
                                             </div>  
-
+                                            <input type="hidden" name="is_health_worker" id="is_health_worker" value="false">
 
                                             <div class="row">
                                                <div class="col-md-6 col-lg-6 col-sm-12 mb-4">
@@ -228,7 +228,7 @@
                                               @endif
                                               </div>
                                             </div>
-                                            
+
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <span>Already have an account? <a class="text-primary fw-bold" href="{{ route('login') }}">Sign in</a></span>
                                                 <button type="submit" class="btn btn-primary py-2 fs-4 rounded-1"><i class="fa-regular fa-circle-check mr-1"></i> Confirm Registration</button>
