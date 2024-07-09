@@ -192,17 +192,16 @@
                                             <div class="row">
                                                <div class="col-md-6 col-lg-6 col-sm-12 mb-4">
                                                    <label for="role" class="form-label">Register As</label>
-                                                      <select class="form-control{{ $errors->has('role') ? ' is-invalid' : '' }}" name="role" id="role" required>
-                                                         <option value="" selected disabled>-- Select --</option>
-                                                         <option value="Health Worker" {{ old('role') === 'Health Worker' ? 'selected' : '' }}>Health Worker</option>
-                                                         <option value="Feminine" {{ old('role') === 'Feminine' ? 'selected' : '' }}>Feminine</option>
-                                                       </select>
-
-                                                   @if ($errors->has('role'))
-                                                   <span class="invalid-feedback">
-                                                    <strong>{{ $errors->first('role') }}</strong>
-                                                   </span>
-                                                         @endif
+                                                   <select class="form-control{{ $errors->has('role') ? ' is-invalid' : '' }}" name="role" id="role" required>
+                                                      <option value="" selected disabled>-- Select --</option>
+                                                      <option value="Health Worker" {{ old('role') == 'Health Worker' ? 'selected' : '' }}>Health Worker</option>
+                                                      <option value="Feminine" {{ old('role') == 'Feminine' ? 'selected' : '' }}>Feminine</option>
+                                                    </select>
+                                                    @if ($errors->has('role'))
+                                                     <span class="invalid-feedback">
+                                                       <strong>{{ $errors->first('role') }}</strong>
+                                                       </span>
+                                                     @endif
                                             </div>
 
                                                   <!-- FEMININE -->
