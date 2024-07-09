@@ -179,6 +179,27 @@
                                             </div>
 
                                             <div class="alert alert-primary" role="alert">
+    <h5>Select your Role</h5>
+    <div class="col-12 mt-2 ml-2">
+        <small id="role_help" class="form-text text-muted">
+            <li><span class="fw-bolder">Feminine</span> - If you are feminine</li>
+            <li><span class="fw-bolder">Health Worker</span> - If you are health worker</li>
+        </small>
+    </div>
+</div>                                     
+
+<div class="row">
+    <div class="col-md-6 col-lg-6 col-sm-12 mb-4">
+        <label for="role" class="form-label">Role</label>
+        <select class="form-control" name="role" id="role">
+            <option value="" selected disabled>-- Select --</option>
+            <option value="Feminine">Feminine</option>
+            <option value="Health Worker">Health Worker</option>
+        </select>
+    </div>
+</div>
+
+                                            <div class="alert alert-primary" role="alert">
                                                 <h5>Select your current menstruation status</h5>
                                                 <div class="col-12 mt-2 ml-2">
                                                     <small id="menstruation_help" class="form-text text-muted">
@@ -251,5 +272,25 @@
             input.value = phoneNumber;
         }
     </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const roleSelect = document.getElementById('role');
+        const menstruationFields = document.getElementById('menstruation-status-fields');
+        const menstruationStatusSelect = document.getElementById('menstruation_status');
+
+        roleSelect.addEventListener('change', function() {
+            const selectedRole = roleSelect.value;
+            if (selectedRole === 'Feminine') {
+                menstruationFields.style.display = 'block';
+                // Reset menstruation status dropdown
+                menstruationStatusSelect.selectedIndex = 0;
+            } else {
+                menstruationFields.style.display = 'none';
+                // Reset menstruation status dropdown
+                menstruationStatusSelect.selectedIndex = 0;
+            }
+        });
+    });
+</script> 
 </body>
 </html>
