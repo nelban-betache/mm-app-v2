@@ -60,9 +60,10 @@ class RegisterController extends Controller
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'menstruation_status' => ['required', 'boolean'],
+            'menstruation_status' => ['required_if:role,Feminine', 'boolean'],
             'birthdate' => ['required', 'date', 'before:today'],
-            'contact_no' => ['numeric', 'nullable', 'regex:/^\d{10,11}$/', 'unique:users,contact_no', 'required_if:email,null'],
+            'contact_no' => ['nullable', 'numeric', 'regex:/^\d{10,11}$/'],
+            'role' => ['required', 'string', 'in:Health Worker,Feminine'],
         ], [
             'contact_no.regex' => 'The contact number must be 10 or 11 digits.',
             'contact_no.unique' => 'The contact number has already been taken.',
@@ -79,12 +80,9 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         try {
-            $role = $data['role'];
-            
-            // Determine default values based on role
-            $defaultMenstruationStatus = $role === 'Feminine' ? $data['menstruation_status'] : null;
-            $userRoleId = $role === 'Health Worker' ? 3 : 2; // 3 for Health Worker, 2 for User
-    
+            $userRoleId = $data['role'] === 'Health Worker' ? 3 : 2; // 3 for Health Worker, 2 for User
+            $defaultMenstruationStatus = $data['role'] === 'Feminine' ? $data['menstruation_status'] : null;
+
             $user = User::create([
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
@@ -98,14 +96,15 @@ class RegisterController extends Controller
                 'user_role_id' => $userRoleId,
                 'is_active' => false, // inactive by default, need to be verified by admin
             ]);
-    
+
             $this->registered();
-    
+
             return $user;
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
+
     
 
     protected function registered() {
