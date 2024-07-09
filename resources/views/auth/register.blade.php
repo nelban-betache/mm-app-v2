@@ -17,6 +17,7 @@
         footer {
             text-align: center;
             padding: 1em;
+            background-color: transpent;
             bottom: 0;
             width: 100%;
         }
@@ -177,6 +178,7 @@
                                                 @endif
                                             </div>
 
+                                             
                                             <div class="alert alert-primary" role="alert">
     <h5>Select your Role</h5>
     <div class="col-12 mt-2 ml-2">
@@ -198,31 +200,33 @@
     </div>
 </div>
 
-                                            <div class="alert alert-primary" role="alert">
-                                                <h5>Select your current menstruation status</h5>
-                                                <div class="col-12 mt-2 ml-2">
-                                                    <small id="menstruation_help" class="form-text text-muted">
-                                                        <li><span class="fw-bolder">Active</span> - Your menstruation is active and is not pregnant</li>
-                                                        <li><span class="fw-bolder">Inactive</span> - Your menstruation is not active and might be pregnant or delayed</li>
-                                                    </small>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="mb-4 col-md-6 col-lg-6 col-sm-12 p-0">
-                                                <label for="menstruation_status" class="form-label">Menstruation Status</label>
-                                                <select class="form-control" name="menstruation_status" id="menstruation_status">
-                                                    <option value="" hidden>-- Select --</option>
-                                                    <option value="1">Active</option>
-                                                    <option value="0">Inactive</option>
-                                                </select>
+<!-- FEMININE -->
+<div id="menstruation-status-fields" style="display: none;">
+    <div class="alert alert-primary" role="alert">
+        <h5>Select your current menstruation status</h5>
+        <div class="col-12 mt-2 ml-2">
+            <small id="menstruation_help" class="form-text text-muted">
+                <li><span class="fw-bolder">Active</span> - Your menstruation is active and is not pregnant</li>
+                <li><span class="fw-bolder">Inactive</span> - Your menstruation is not active and might be pregnant or delayed</li>
+            </small>
+        </div>
+    </div>
 
-                                                @if ($errors->has('menstruation_status'))
-                                                    <span class="invalid-feedback">
-                                                        <strong>{{ $errors->first('menstruation_status') }}</strong>
-                                                    </span>
-                                                @endif
-                                            </div>
+    <div class="mb-4 col-md-6 col-lg-6 col-sm-12 p-0">
+        <label for="menstruation_status" class="form-label">Menstruation Status</label>
+        <select class="form-control" name="menstruation_status" id="menstruation_status">
+            <option value="" hidden>-- Select --</option>
+            <option value="1">Active</option>
+            <option value="0">Inactive</option>
+        </select>
 
+        @if ($errors->has('menstruation_status'))
+            <span class="invalid-feedback">
+                <strong>{{ $errors->first('menstruation_status') }}</strong>
+            </span>
+        @endif
+    </div>
+</div>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <span>Already have an account? <a class="text-primary fw-bold" href="{{ route('login') }}">Sign in</a></span>
                                                 <button type="submit" class="btn btn-primary py-2 fs-4 rounded-1"><i class="fa-regular fa-circle-check mr-1"></i> Confirm Registration</button>
@@ -237,9 +241,9 @@
             </div>
         </div>
     </div>
-   <!-- <footer class="text-center mt-4">
+    <footer class="text-center mt-4">
         <p>Menstrual Monitoring App v2</p>
-    </footer>-->
+    </footer>
 
     <script src="{{ asset('assets/auth/libs/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/auth/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
