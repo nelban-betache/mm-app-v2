@@ -194,8 +194,8 @@
                                                  <label for="role" class="form-label">Register As</label>
                                                    <select class="form-control" name="role" id="role">
                                                      <option value="" selected disabled>-- Select --</option>
-                                                     <option value="Feminine">Feminine</option>
                                                      <option value="Health Worker">Health Worker</option>
+                                                     <option value="Feminine">Feminine</option>
                                                    </select>
                                                    @if ($errors->has('role'))
                                                         <span class="invalid-feedback">
