@@ -3,17 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Validation\Rule;
-
-use App\Models\User;
-
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
-use Session;
+use App\Models\User;
 
 class RegisterController extends Controller
 {
@@ -58,15 +53,16 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['nullable', 'string', 'max:255'],
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'menstruation_status' => ['required_if:role,Feminine', 'boolean'],
-            'birthdate' => ['required', 'date', 'before:today'],
             'contact_no' => ['nullable', 'numeric', 'regex:/^\d{10,11}$/'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'birthdate' => ['required', 'date', 'before:today'],
             'role' => ['required', 'string', 'in:Health Worker,Feminine'],
+            'menstruation_status' => ['required_if:role,Feminine', 'boolean'],
         ], [
             'contact_no.regex' => 'The contact number must be 10 or 11 digits.',
-            'contact_no.unique' => 'The contact number has already been taken.',
             'unique' => 'The :attribute field has already been taken.'
         ]);
     }
@@ -81,11 +77,11 @@ class RegisterController extends Controller
     {
         try {
             $role = $data['role'];
-    
+
             // Determine default values based on role
             $defaultMenstruationStatus = $role === 'Feminine' ? $data['menstruation_status'] : null;
             $userRoleId = $role === 'Health Worker' ? 3 : 2; // 3 for Health Worker, 2 for User
-    
+
             $user = User::create([
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
@@ -97,23 +93,33 @@ class RegisterController extends Controller
                 'password' => Hash::make($data['password']),
                 'menstruation_status' => $defaultMenstruationStatus,
                 'user_role_id' => $userRoleId,
-                'is_active' => false, // inactive by default, need to be verified by admin
+                'is_active' => false, // inactive by default, needs to be verified by admin
             ]);
-    
+
             $this->registered();
-    
+
             return $user;
         } catch (\Exception $e) {
+            // Handle any exceptions during registration
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
-    
-    protected function registered() {
-        Session::flush();
-        Auth::logout();
 
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    protected function registered()
+    {
+        Session::flush(); // Flush any existing session data
+        Auth::logout(); // Logout the user after registration
+
+        // Flash a message to the user
         Session::flash('post-register', 'Registration completed! Please wait for the admin to verify your account.');
 
+        // Redirect the user to the login page
         return redirect()->route('login.page');
     }
 }
