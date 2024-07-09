@@ -27,7 +27,6 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'middle_name' => ['nullable', 'string', 'max:255'], // Ensure max length if needed
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
             'contact_no' => ['nullable', 'numeric', 'regex:/^\d{10,11}$/'], // Validate numeric with specific regex
@@ -44,12 +43,18 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         try {
+            Log::info('Starting user creation.');
+
             $role = $data['role'];
+            Log::info('Role: ' . $role);
 
             // Determine default values based on role
             $defaultMenstruationStatus = $role === 'Feminine' ? $data['menstruation_status'] : null;
             $userRoleId = $role === 'Health Worker' ? 3 : 2; // 3 for Health Worker, 2 for User
             $isActive = false; // All users are inactive by default
+
+            Log::info('Default Menstruation Status: ' . json_encode($defaultMenstruationStatus));
+            Log::info('User Role ID: ' . $userRoleId);
 
             $user = User::create([
                 'first_name' => $data['first_name'],
@@ -65,7 +70,7 @@ class RegisterController extends Controller
                 'is_active' => $isActive,
             ]);
 
-            Log::info('User registration successful: ' . $user->id);
+            Log::info('User created successfully: ' . $user->id);
 
             return $this->registered($user);
         } catch (\Exception $e) {
