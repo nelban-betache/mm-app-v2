@@ -25,9 +25,9 @@
                     <div class="col-md-8 col-lg-6 col-xxl-3">
                         <div class="card mb-0">
                             <div class="card-body">
-                                <!-- <div class="d-flex align-items-center justify-content-center">
+                                <div class="d-flex align-items-center justify-content-center">
                                     <img style="width: 200px" class="img-fluid" alt="logo" src="{{ asset('assets/images/blood.jpg') }}" />
-                                </div> -->
+                                </div>
                                 
                                 @if(Route::has('login'))
                                     <p class="text-center fw-bolder mb-1 h4">Menstrual Monitoring App</p>
