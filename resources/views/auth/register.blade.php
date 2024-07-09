@@ -17,7 +17,6 @@
         footer {
             text-align: center;
             padding: 1em;
-            background-color: transpent;
             bottom: 0;
             width: 100%;
         }
@@ -238,9 +237,9 @@
             </div>
         </div>
     </div>
-    <footer class="text-center mt-4">
+   <!-- <footer class="text-center mt-4">
         <p>Menstrual Monitoring App v2</p>
-    </footer>
+    </footer>-->
 
     <script src="{{ asset('assets/auth/libs/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/auth/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
