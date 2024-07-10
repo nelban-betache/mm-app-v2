@@ -71,6 +71,7 @@ class RegisterController extends Controller
             'menstruation_status.required_if' => 'The menstruation status field is required for Feminine role.'
         ]);
     }
+    
 
     /**
      * Create a new user instance after a valid registration.
@@ -81,7 +82,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $role = $data['role'] === 'Health Worker' ? 3 : 2;
-
+    
         return User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
@@ -95,6 +96,7 @@ class RegisterController extends Controller
             'menstruation_status' => $role === 2 ? $data['menstruation_status'] : null,
         ]);
     }
+    
 
     protected function registered() {
         Session::flush();

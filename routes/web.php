@@ -98,6 +98,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('health-worker/pie-chart-data', [BarangayHealthWorkerController::class, 'pieChartData']);
 
         Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
- Route::post('register', [RegisterController::class, 'register']);
+        Route::post('register', [RegisterController::class, 'register']);
     });
 });

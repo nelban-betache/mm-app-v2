@@ -239,6 +239,27 @@
                                                 <button type="submit" class="btn btn-primary py-2 fs-4 rounded-1"><i class="fa-regular fa-circle-check mr-1"></i> Confirm Registration</button>
                                             </div>
                                         </form>
+                                        <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const roleSelect = document.getElementById('role');
+    const menstruationFields = document.getElementById('menstruation-status-fields');
+    const menstruationStatusSelect = document.getElementById('menstruation_status');
+
+    roleSelect.addEventListener('change', function() {
+        const selectedRole = roleSelect.value;
+        if (selectedRole === 'Feminine') {
+            menstruationFields.style.display = 'block';
+            menstruationStatusSelect.selectedIndex = 0;
+        } else if (selectedRole === 'Health Worker') {
+            menstruationFields.style.display = 'none';
+            menstruationStatusSelect.selectedIndex = 0;
+        }
+    });
+
+    roleSelect.dispatchEvent(new Event('change'));
+});
+</script>
+
                                     @endauth
                                 @endif
                             </div>
@@ -282,25 +303,5 @@
             input.value = phoneNumber;
         }
     </script>
-  <script>
-                                        document.addEventListener('DOMContentLoaded', function() {
-                                            const roleSelect = document.getElementById('role');
-                                            const menstruationFields = document.getElementById('menstruation-status-fields');
-                                            const menstruationStatusSelect = document.getElementById('menstruation_status');
-
-                                            roleSelect.addEventListener('change', function() {
-                                                const selectedRole = roleSelect.value;
-                                                if (selectedRole === 'Feminine') {
-                                                    menstruationFields.style.display = 'block';
-                                                    menstruationStatusSelect.selectedIndex = 0;
-                                                } else if (selectedRole === 'Health Worker') {
-                                                    menstruationFields.style.display = 'none';
-                                                    menstruationStatusSelect.selectedIndex = 0;
-                                                }
-                                            });
-
-                                            roleSelect.dispatchEvent(new Event('change'));
-                                        });
-                                    </script>
 </body>
 </html>
