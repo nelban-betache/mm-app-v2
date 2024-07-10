@@ -8,7 +8,7 @@
 @endsection
 
 @section('contents')
-    <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+    <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin" style="background-color: #f562b9; ">
     <div>
     <h4 id="greeting" class="mb-3 mb-md-0">Good morning {{ Auth::user()->first_name }}!</h4>
 </div>
