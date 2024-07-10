@@ -53,6 +53,7 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
+
     protected function validator(array $data)
     {
         return Validator::make($data, [
@@ -61,13 +62,15 @@ class RegisterController extends Controller
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', Rule::in(['Health Worker', 'Feminine'])],
-            'menstruation_status' => ['nullable', 'in:0,1', 'required_if:role,Feminine'],
+            'menstruation_status' => ['nullable', 'in:0,1', Rule::requiredIf(function () use ($data) {
+                return $data['role'] === 'Feminine';
+            })],
             'birthdate' => ['required', 'date', 'before:today'],
             'contact_no' => ['required', 'numeric', 'digits_between:10,11', 'unique:users,contact_no'],
         ], [
             'contact_no.regex' => 'The contact number must be 10 or 11 digits.',
             'contact_no.unique' => 'The contact number has already been taken.',
-            'unique' => 'The :attribute field has already been taken.'
+            'unique' => 'The :attribute field has already been taken.',
         ]);
     }
 
@@ -77,10 +80,11 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
+    
     protected function create(array $data)
     {
         $role = $data['role'] === 'Health Worker' ? 3 : 2;
-
+    
         return User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
@@ -93,9 +97,7 @@ class RegisterController extends Controller
             'user_role_id' => $role,
             'menstruation_status' => $role === 2 ? $data['menstruation_status'] : null,
         ]);
-    }
-    
-    
+    }  
 
     protected function registered()
     {

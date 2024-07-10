@@ -238,6 +238,28 @@
                                                 <button type="submit" class="btn btn-primary py-2 fs-4 rounded-1"><i class="fa-regular fa-circle-check mr-1"></i> Confirm Registration</button>
                                             </div>
                                         </form>
+                                        <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const roleSelect = document.getElementById('role');
+        const menstruationFields = document.getElementById('menstruation-status-fields');
+        const menstruationStatusSelect = document.getElementById('menstruation_status');
+
+        roleSelect.addEventListener('change', function() {
+            const selectedRole = roleSelect.value;
+            if (selectedRole === 'Feminine') {
+                menstruationFields.style.display = 'block';
+                menstruationStatusSelect.setAttribute('required', 'required');
+            } else {
+                menstruationFields.style.display = 'none';
+                menstruationStatusSelect.removeAttribute('required');
+                menstruationStatusSelect.value = ''; // Clear value if not required
+            }
+        });
+
+        roleSelect.dispatchEvent(new Event('change')); // Trigger change event initially
+    });
+</script>
+
                                    @endauth
                                 @endif
                             </div>
@@ -281,26 +303,5 @@
             input.value = phoneNumber;
         }
     </script>
- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const roleSelect = document.getElementById('role');
-        const menstruationFields = document.getElementById('menstruation-status-fields');
-        const menstruationStatusSelect = document.getElementById('menstruation_status');
-
-        roleSelect.addEventListener('change', function() {
-            const selectedRole = roleSelect.value;
-            if (selectedRole === 'Feminine') {
-                menstruationFields.style.display = 'block';
-                menstruationStatusSelect.setAttribute('required', 'required');
-            } else {
-                menstruationFields.style.display = 'none';
-                menstruationStatusSelect.removeAttribute('required');
-                menstruationStatusSelect.value = ''; // Clear value if not required
-            }
-        });
-
-        roleSelect.dispatchEvent(new Event('change')); // Trigger change event initially
-    });
-</script>
 </body>
 </html>
