@@ -61,7 +61,7 @@ class RegisterController extends Controller
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', Rule::in(['Health Worker', 'Feminine'])],
-            'menstruation_status' => ['nullable', 'in:0,1', 'required_if:role,Feminine'], // Ensure menstruation_status is required for Feminine role
+            'menstruation_status' => ['nullable', 'in:0,1', 'required_if:role,Feminine'],
             'birthdate' => ['required', 'date', 'before:today'],
             'contact_no' => ['required', 'numeric', 'digits_between:10,11', 'unique:users,contact_no'],
         ], [
@@ -80,7 +80,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $role = $data['role'] === 'Health Worker' ? 3 : 2;
-    
+
         return User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
@@ -91,13 +91,14 @@ class RegisterController extends Controller
             'birthdate' => $data['birthdate'] ?? null,
             'password' => Hash::make($data['password']),
             'user_role_id' => $role,
-            'menstruation_status' => $role === 2 ? $data['menstruation_status'] : null, // Set menstruation_status only if role is Feminine
+            'menstruation_status' => $role === 2 ? $data['menstruation_status'] : null,
         ]);
     }
     
     
 
-    protected function registered() {
+    protected function registered()
+    {
         Session::flush();
         Auth::logout();
 

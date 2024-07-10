@@ -281,7 +281,7 @@
             input.value = phoneNumber;
         }
     </script>
-  <script>
+ <script>
     document.addEventListener('DOMContentLoaded', function() {
         const roleSelect = document.getElementById('role');
         const menstruationFields = document.getElementById('menstruation-status-fields');
@@ -291,10 +291,11 @@
             const selectedRole = roleSelect.value;
             if (selectedRole === 'Feminine') {
                 menstruationFields.style.display = 'block';
-                menstruationStatusSelect.setAttribute('required', 'required'); // Ensure field is required for Feminine role
+                menstruationStatusSelect.setAttribute('required', 'required');
             } else {
                 menstruationFields.style.display = 'none';
-                menstruationStatusSelect.removeAttribute('required'); // Remove required attribute if not Feminine
+                menstruationStatusSelect.removeAttribute('required');
+                menstruationStatusSelect.value = ''; // Clear value if not required
             }
         });
 

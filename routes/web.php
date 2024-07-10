@@ -21,7 +21,6 @@ use App\Http\Controllers\ForgotPasswordController;
 Auth::routes();
 Route::view('/', 'auth/login')->name('login.page');
 
-// Registration Routes
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
 
