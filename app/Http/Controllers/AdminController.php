@@ -461,4 +461,13 @@ class AdminController extends Controller {
                 ];
             });
     }
+    public function verifyHealthWorker(Request $request)
+{
+    $user = User::findOrFail($request->id);
+    $user->is_verified = true;
+    $user->is_active = true;
+    $user->save();
+
+    return response()->json(['success' => true]);
+}
 }

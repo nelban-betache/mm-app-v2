@@ -13,6 +13,7 @@ $(function () {
             { data: "full_name" },
             { data: "is_active" },
             { data: "assigning_action" },
+            { data: "is_active" },
             { data: "action" },
         ],
     });
@@ -35,6 +36,11 @@ $(document).ready(function () {
     $(document).find("#assign_feminine").select2({
         placeholder: "Select fiminine to assign",
         tags: false,
+    });
+
+    $(document).on("click", ".verify-hw", function() {
+        var userId = $(this).data("id");
+        verifyHealthWorker(userId);
     });
 
     var date = new Date();
@@ -266,6 +272,10 @@ $(document).ready(function () {
         modal
             .find(".modal-body #view_is_active")
             .text(button.data("is_active") === 1 ? "• Active" : "• Inactive");
+
+        modal
+            .find(".modal-body #view_is_verified")
+            .text(button.data("is_verified") === 1 ? "• Verified" : "• Unverified");
 
         var assigned_feminine_list = button.data("assigned_feminine_list");
         if (assigned_feminine_list.length != 0) {
@@ -545,10 +555,60 @@ $(document).ready(function () {
                     transitionIn: "bounceInDown",
                     transitionOut: "fadeOutUp",
                 });
+
             },
         });
     }
 });
+function verifyHealthWorker(userId) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to verify this health worker.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, verify it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "../admin/verify-health-worker",
+                type: "POST",
+                data: {
+                    id: userId
+                },
+                success: function(response) {
+                    $("#hw_table").DataTable().ajax.reload();
+                    iziToast.success({
+                        close: false,
+                        displayMode: 2,
+                        layout: 2,
+                        position: "topCenter",
+                        drag: false,
+                        title: "Success!",
+                        message: "Health worker has been successfully verified.",
+                        transitionIn: "bounceInDown",
+                        transitionOut: "fadeOutUp"
+                    });
+                },
+                error: function(response) {
+                    iziToast.error({
+                        close: false,
+                        displayMode: 2,
+                        position: "topCenter",
+                        drag: false,
+                        title: "Oops!",
+                        message: "Something went wrong, please try again.",
+                        transitionIn: "bounceInDown",
+                        transitionOut: "fadeOutUp"
+                    });
+                }
+            });
+        }
+    });
+}
+
+
 
 $("#newHealthWorkerModal").on("shown.bs.modal", function () {
     $("#newHealthWorkerForm").trigger("reset");
