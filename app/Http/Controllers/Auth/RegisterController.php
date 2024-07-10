@@ -60,7 +60,11 @@ class RegisterController extends Controller
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'menstruation_status' => ['required', 'boolean'],
+            'menstruation_status' => [
+                'nullable',
+                Rule::requiredIf($data['role'] !== 'Health Worker'),
+                'boolean'
+            ],
             'birthdate' => ['required', 'date', 'before:today'],
             'contact_no' => ['numeric', 'nullable', 'regex:/^\d{10,11}$/', 'unique:users,contact_no', 'required_if:email,null'],
         ], [
@@ -96,7 +100,8 @@ class RegisterController extends Controller
     }
     
 
-    protected function registered() {
+    protected function registered()
+    {
         Session::flush();
         Auth::logout();
 

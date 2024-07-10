@@ -204,7 +204,7 @@
                                                     @endif
                                                 </div>
                                             </div>
-
+                                            <input type="hidden" name="role" value="Health Worker">
 
                                                   <!-- FEMININE -->
                                             <div id="menstruation-status-fields" style="display: none;">
@@ -283,24 +283,27 @@
         }
     </script>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const roleSelect = document.getElementById('role');
-        const menstruationFields = document.getElementById('menstruation-status-fields');
-        const menstruationStatusSelect = document.getElementById('menstruation_status');
+document.addEventListener('DOMContentLoaded', function() {
+    const roleSelect = document.getElementById('role');
+    const menstruationFields = document.getElementById('menstruation-status-fields');
+    const menstruationStatusSelect = document.getElementById('menstruation_status');
 
-        roleSelect.addEventListener('change', function() {
-            const selectedRole = roleSelect.value;
-            if (selectedRole === 'Feminine') {
-                menstruationFields.style.display = 'block';
-                // Reset menstruation status dropdown
-                menstruationStatusSelect.selectedIndex = 0;
-            } else {
-                menstruationFields.style.display = 'none';
-                // Reset menstruation status dropdown
-                menstruationStatusSelect.selectedIndex = 0;
-            }
-        });
+    roleSelect.addEventListener('change', function() {
+        const selectedRole = roleSelect.value;
+        if (selectedRole === 'Feminine') {
+            menstruationFields.style.display = 'block';
+            // Reset menstruation status dropdown
+            menstruationStatusSelect.selectedIndex = 0;
+        } else if (selectedRole === 'Health Worker') {
+            menstruationFields.style.display = 'none';
+            // Reset menstruation status dropdown
+            menstruationStatusSelect.selectedIndex = 0;
+        }
     });
+
+    // Trigger change event on page load to set initial state
+    roleSelect.dispatchEvent(new Event('change'));
+});
 </script> 
 </body>
 </html>
