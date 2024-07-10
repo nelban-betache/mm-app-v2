@@ -191,20 +191,19 @@
 
                                             <div class="row">
                                                <div class="col-md-6 col-lg-6 col-sm-12 mb-4">
-                                                 <label for="role" class="form-label">Register As</label>
-                                                   <select class="form-control" name="role" id="role">
-                                                     <option value="" selected disabled>-- Select --</option>
-                                                     <option value="Health Worker">Health Worker</option>
-                                                     <option value="Feminine">Feminine</option>
-                                                   </select>
-                                                   @if ($errors->has('role'))
-                                                        <span class="invalid-feedback">
-                                                            <strong>{{ $errors->first('role') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
+                                                  <label for="role" class="form-label">Register As</label>
+                                                       <select class="form-control" name="role" id="role">
+                                                          <option value="" selected disabled>-- Select --</option>
+                                                          <option value="Health Worker">Health Worker</option>
+                                                          <option value="Feminine">Feminine</option>
+                                                       </select>
+                                                           @error('role')
+                                                            <span class="invalid-feedback">
+                                                               <strong>{{ $message }}</strong>
+                                                            </span>
+                                                          @enderror
+                                               </div>
                                             </div>
-                                            <input type="hidden" name="role" value="Health Worker">
 
                                                   <!-- FEMININE -->
                                             <div id="menstruation-status-fields" style="display: none;">
@@ -239,28 +238,7 @@
                                                 <button type="submit" class="btn btn-primary py-2 fs-4 rounded-1"><i class="fa-regular fa-circle-check mr-1"></i> Confirm Registration</button>
                                             </div>
                                         </form>
-                                        <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const roleSelect = document.getElementById('role');
-    const menstruationFields = document.getElementById('menstruation-status-fields');
-    const menstruationStatusSelect = document.getElementById('menstruation_status');
-
-    roleSelect.addEventListener('change', function() {
-        const selectedRole = roleSelect.value;
-        if (selectedRole === 'Feminine') {
-            menstruationFields.style.display = 'block';
-            menstruationStatusSelect.selectedIndex = 0;
-        } else if (selectedRole === 'Health Worker') {
-            menstruationFields.style.display = 'none';
-            menstruationStatusSelect.selectedIndex = 0;
-        }
-    });
-
-    roleSelect.dispatchEvent(new Event('change'));
-});
-</script>
-
-                                    @endauth
+                                   @endauth
                                 @endif
                             </div>
                         </div>
@@ -303,5 +281,25 @@ document.addEventListener('DOMContentLoaded', function() {
             input.value = phoneNumber;
         }
     </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const roleSelect = document.getElementById('role');
+        const menstruationFields = document.getElementById('menstruation-status-fields');
+        const menstruationStatusSelect = document.getElementById('menstruation_status');
+
+        roleSelect.addEventListener('change', function() {
+            const selectedRole = roleSelect.value;
+            if (selectedRole === 'Feminine') {
+                menstruationFields.style.display = 'block';
+                menstruationStatusSelect.setAttribute('required', 'required'); // Ensure field is required for Feminine role
+            } else {
+                menstruationFields.style.display = 'none';
+                menstruationStatusSelect.removeAttribute('required'); // Remove required attribute if not Feminine
+            }
+        });
+
+        roleSelect.dispatchEvent(new Event('change')); // Trigger change event initially
+    });
+</script>
 </body>
 </html>

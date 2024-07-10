@@ -93,9 +93,10 @@ class RegisterController extends Controller
             'birthdate' => $data['birthdate'] ?? null,
             'password' => Hash::make($data['password']),
             'user_role_id' => $role,
-            'menstruation_status' => $role === 2 ? $data['menstruation_status'] : null,
+            'menstruation_status' => $role === 2 ? $data['menstruation_status'] : null, // Set menstruation_status only if role is Feminine
         ]);
     }
+    
     
 
     protected function registered() {
