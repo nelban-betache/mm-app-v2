@@ -282,28 +282,25 @@
             input.value = phoneNumber;
         }
     </script>
-    <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const roleSelect = document.getElementById('role');
-    const menstruationFields = document.getElementById('menstruation-status-fields');
-    const menstruationStatusSelect = document.getElementById('menstruation_status');
+  <script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            const roleSelect = document.getElementById('role');
+                                            const menstruationFields = document.getElementById('menstruation-status-fields');
+                                            const menstruationStatusSelect = document.getElementById('menstruation_status');
 
-    roleSelect.addEventListener('change', function() {
-        const selectedRole = roleSelect.value;
-        if (selectedRole === 'Feminine') {
-            menstruationFields.style.display = 'block';
-            // Reset menstruation status dropdown
-            menstruationStatusSelect.selectedIndex = 0;
-        } else if (selectedRole === 'Health Worker') {
-            menstruationFields.style.display = 'none';
-            // Reset menstruation status dropdown
-            menstruationStatusSelect.selectedIndex = 0;
-        }
-    });
+                                            roleSelect.addEventListener('change', function() {
+                                                const selectedRole = roleSelect.value;
+                                                if (selectedRole === 'Feminine') {
+                                                    menstruationFields.style.display = 'block';
+                                                    menstruationStatusSelect.selectedIndex = 0;
+                                                } else if (selectedRole === 'Health Worker') {
+                                                    menstruationFields.style.display = 'none';
+                                                    menstruationStatusSelect.selectedIndex = 0;
+                                                }
+                                            });
 
-    // Trigger change event on page load to set initial state
-    roleSelect.dispatchEvent(new Event('change'));
-});
-</script> 
+                                            roleSelect.dispatchEvent(new Event('change'));
+                                        });
+                                    </script>
 </body>
 </html>

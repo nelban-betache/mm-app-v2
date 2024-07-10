@@ -96,5 +96,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('health-worker/change-password', [BarangayHealthWorkerController::class, 'changePassword']);
 
         Route::get('health-worker/pie-chart-data', [BarangayHealthWorkerController::class, 'pieChartData']);
+
+        Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+ Route::post('register', [RegisterController::class, 'register']);
     });
 });

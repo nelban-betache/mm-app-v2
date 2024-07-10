@@ -89,15 +89,12 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'contact_no' => $data['contact_no'],
             'address' => $data['address'] ?? null,
-            'birthdate' => date('Y-m-d', strtotime($data['birthdate'])),
+            'birthdate' => $data['birthdate'] ?? null,
             'password' => Hash::make($data['password']),
-            'menstruation_status' => $data['role'] === 'Health Worker' ? null : $data['menstruation_status'],
             'user_role_id' => $role,
-            'is_active' => false,
+            'menstruation_status' => $role === 2 ? $data['menstruation_status'] : null,
         ]);
     }
-
-    
 
     protected function registered() {
         Session::flush();
