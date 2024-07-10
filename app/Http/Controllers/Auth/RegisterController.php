@@ -60,17 +60,15 @@ class RegisterController extends Controller
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'menstruation_status' => [
-                'nullable',
-                Rule::requiredIf($data['role'] !== 'Health Worker'),
-                'boolean'
-            ],
+            'role' => ['required', Rule::in(['Health Worker', 'Feminine'])],
+            'menstruation_status' => ['nullable', 'boolean', 'required_if:role,Feminine'],
             'birthdate' => ['required', 'date', 'before:today'],
             'contact_no' => ['numeric', 'nullable', 'regex:/^\d{10,11}$/', 'unique:users,contact_no', 'required_if:email,null'],
         ], [
             'contact_no.regex' => 'The contact number must be 10 or 11 digits.',
             'contact_no.unique' => 'The contact number has already been taken.',
-            'unique' => 'The :attribute field has already been taken.'
+            'unique' => 'The :attribute field has already been taken.',
+            'menstruation_status.required_if' => 'The menstruation status field is required for Feminine role.'
         ]);
     }
 
@@ -83,7 +81,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $role = $data['role'] === 'Health Worker' ? 3 : 2;
-    
+
         return User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
@@ -98,10 +96,10 @@ class RegisterController extends Controller
             'is_active' => false,
         ]);
     }
+
     
 
-    protected function registered()
-    {
+    protected function registered() {
         Session::flush();
         Auth::logout();
 
