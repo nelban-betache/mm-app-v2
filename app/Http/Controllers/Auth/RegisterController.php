@@ -76,8 +76,18 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create(array $data) {
+    protected function create(array $data)
+    {
         try {
+            $role = $data['role'] ?? 'User'; // Adjust based on your form field name
+            
+            $roleId = 2; // Default role ID for User
+            
+            // Determine the role ID based on the selected role
+            if ($role === 'Health Worker') {
+                $roleId = 3; // Health Worker role ID
+            }
+            
             return User::create([
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
@@ -88,16 +98,17 @@ class RegisterController extends Controller
                 'birthdate' => date('Y-m-d', strtotime($data['birthdate'])),
                 'password' => Hash::make($data['password']),
                 'menstruation_status' => $data['menstruation_status'],
-                'user_role_id ' => 2, // 2 = default for user only role
+                'user_role_id' => $roleId, // Set user role ID based on selected role
                 'is_active' => false, // inactive by default, need to be verified by admin
             ]);
-
-            return $this->registered();
-        }
-        catch(\Exception $e) {
+    
+            // Note: removed redundant return statement and called $this->registered() separately
+            $this->registered();
+        } catch (\Exception $e) {
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
+    
 
     protected function registered() {
         Session::flush();
