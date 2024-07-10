@@ -28,25 +28,29 @@ class RegisterController extends Controller
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'menstruation_status' => ['required_if:role,Health Worker', 'nullable', 'boolean'],
+            'menstruation_status' => ['nullable', 'boolean'], // Adjust as per your requirement
             'birthdate' => ['required', 'date', 'before:today'],
             'contact_no' => ['required', 'numeric', 'regex:/^\d{10,11}$/', 'unique:users,contact_no'],
+            'role' => ['required', 'string', 'in:User,Health Worker'], // Ensure role is validated
         ], [
             'contact_no.regex' => 'The contact number must be 10 or 11 digits.',
             'contact_no.unique' => 'The contact number has already been taken.',
-            'unique' => 'The :attribute field has already been taken.'
+            'unique' => 'The :attribute field has already been taken.',
+            'role.in' => 'Invalid role selected.', // Custom error message for role validation
         ]);
     }
 
     protected function create(array $data)
     {
         try {
-            $role = $data['role'] ?? 'User'; // Adjust based on your form field name
-            
-            $roleId = ($role === 'Health Worker') ? 3 : 2; // Default role ID for User
-            
-            // Adjusting menstruation_status for Health Workers
-            $menstruationStatus = ($role === 'Health Worker') ? null : $data['menstruation_status'];
+            // Determine role ID based on selected role
+            $roleId = ($data['role'] === 'Health Worker') ? 3 : 2;
+
+            // Adjust menstruation_status for Health Workers if needed
+            $menstruationStatus = ($roleId === 3) ? null : $data['menstruation_status'];
+
+            // Log/debug statement to check values
+            \Log::info("Role ID: $roleId, Menstruation Status: $menstruationStatus");
 
             $user = User::create([
                 'first_name' => $data['first_name'],
@@ -67,7 +71,11 @@ class RegisterController extends Controller
 
             return $user;
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
+            // Log the error
+            \Log::error("Registration failed: " . $e->getMessage());
+
+            // Redirect back with error message
+            return redirect()->back()->withInput()->withErrors(['error' => 'Registration failed. Please try again later.']);
         }
     }
 
