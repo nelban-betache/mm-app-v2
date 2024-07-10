@@ -9,7 +9,7 @@
 
 @section('contents')
     <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
-    <div style="background-color: black;">
+    <div style="background-color: #FAE6E7;">
     <h4 id="greeting" class="mb-3 mb-md-0">Good morning {{ Auth::user()->first_name }}!</h4>
 </div>
         <div class="d-flex align-items-center flex-wrap text-nowrap">
