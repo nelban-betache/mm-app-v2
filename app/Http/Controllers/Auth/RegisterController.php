@@ -53,24 +53,20 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-
     protected function validator(array $data)
     {
         return Validator::make($data, [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', Rule::in(['Health Worker', 'Feminine'])],
-            'menstruation_status' => ['nullable', 'in:0,1', Rule::requiredIf(function () use ($data) {
-                return $data['role'] === 'Feminine';
-            })],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'menstruation_status' => ['required', 'boolean'],
             'birthdate' => ['required', 'date', 'before:today'],
-            'contact_no' => ['required', 'numeric', 'digits_between:10,11', 'unique:users,contact_no'],
+            'contact_no' => ['numeric', 'nullable', 'regex:/^\d{10,11}$/', 'unique:users,contact_no', 'required_if:email,null'],
         ], [
             'contact_no.regex' => 'The contact number must be 10 or 11 digits.',
             'contact_no.unique' => 'The contact number has already been taken.',
-            'unique' => 'The :attribute field has already been taken.',
+            'unique' => 'The :attribute field has already been taken.'
         ]);
     }
 
@@ -80,27 +76,30 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    
-    protected function create(array $data)
-    {
-        $role = $data['role'] === 'Health Worker' ? 3 : 2;
-    
-        return User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'middle_name' => $data['middle_name'] ?? null,
-            'email' => $data['email'],
-            'contact_no' => $data['contact_no'],
-            'address' => $data['address'] ?? null,
-            'birthdate' => $data['birthdate'] ?? null,
-            'password' => Hash::make($data['password']),
-            'user_role_id' => $role,
-            'menstruation_status' => $role === 2 ? $data['menstruation_status'] : null,
-        ]);
-    }  
+    protected function create(array $data) {
+        try {
+            return User::create([
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'middle_name' => $data['middle_name'] ?? null,
+                'email' => $data['email'],
+                'contact_no' => $data['contact_no'],
+                'address' => $data['address'] ?? null,
+                'birthdate' => date('Y-m-d', strtotime($data['birthdate'])),
+                'password' => Hash::make($data['password']),
+                'menstruation_status' => $data['menstruation_status'],
+                'user_role_id ' => 2, // 2 = default for user only role
+                'is_active' => false, // inactive by default, need to be verified by admin
+            ]);
 
-    protected function registered()
-    {
+            return $this->registered();
+        }
+        catch(\Exception $e) {
+            return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    protected function registered() {
         Session::flush();
         Auth::logout();
 
