@@ -86,12 +86,12 @@
                                                     </span>
                                                 @endif
                                             </div>
-                                            <!-- <div class="d-flex align-items-center justify-content-between mb-4">
+                                            <div class="d-flex align-items-center justify-content-between mb-4">
                                                 <div class="form-check">
                                                     <input class="form-check-input primary" type="checkbox" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }}>
                                                     <label class="form-check-label text-dark" for="remember">Remeber me</label>
                                                 </div>
-                                            </div> -->
+                                            </div>
                                             <button type="submit" class="btn btn-primary w-100 py-2 fs-4 rounded-1">Sign In</button>
                                             <div class="d-flex align-items-center justify-content-between mt-3">
                                                 @if(Route::has('register'))
