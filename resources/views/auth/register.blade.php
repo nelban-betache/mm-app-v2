@@ -39,7 +39,7 @@
 }
 </style>
 </head>
-<body style="background-color: #f967be;">
+<body style="background-color: #f562b9">
     <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
         <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
             <div class="d-flex align-items-center justify-content-center w-100 py-5">
@@ -238,7 +238,6 @@
                                                 <button type="submit" class="btn btn-primary py-2 fs-4 rounded-1"><i class="fa-regular fa-circle-check mr-1"></i> Confirm Registration</button>
                                             </div>
                                         </form>
-                                        
                                    @endauth
                                 @endif
                             </div>
@@ -282,5 +281,26 @@
             input.value = phoneNumber;
         }
     </script>
+ <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const roleSelect = document.getElementById('role');
+        const menstruationFields = document.getElementById('menstruation-status-fields');
+        const menstruationStatusSelect = document.getElementById('menstruation_status');
+
+        roleSelect.addEventListener('change', function() {
+            const selectedRole = roleSelect.value;
+            if (selectedRole === 'Feminine') {
+                menstruationFields.style.display = 'block';
+                menstruationStatusSelect.setAttribute('required', 'required');
+            } else {
+                menstruationFields.style.display = 'none';
+                menstruationStatusSelect.removeAttribute('required');
+                menstruationStatusSelect.value = ''; // Clear value if not required
+            }
+        });
+
+        roleSelect.dispatchEvent(new Event('change')); // Trigger change event initially
+    });
+</script>
 </body>
 </html>
