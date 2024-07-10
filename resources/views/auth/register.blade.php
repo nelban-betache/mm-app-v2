@@ -281,7 +281,7 @@
             input.value = phoneNumber;
         }
     </script>
-    <script>
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
         const roleSelect = document.getElementById('role');
         const menstruationFields = document.getElementById('menstruation-status-fields');

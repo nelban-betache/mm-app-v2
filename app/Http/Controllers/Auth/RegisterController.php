@@ -59,19 +59,17 @@ class RegisterController extends Controller
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', Rule::in(['Health Worker', 'Feminine'])],
-            'menstruation_status' => ['nullable', 'boolean', 'required_if:role,Feminine'],
+            'menstruation_status' => ['nullable', 'in:0,1', 'required_if:role,Feminine'], // Ensure menstruation_status is required for Feminine role
             'birthdate' => ['required', 'date', 'before:today'],
-            'contact_no' => ['numeric', 'nullable', 'regex:/^\d{10,11}$/', 'unique:users,contact_no', 'required_if:email,null'],
+            'contact_no' => ['required', 'numeric', 'digits_between:10,11', 'unique:users,contact_no'],
         ], [
             'contact_no.regex' => 'The contact number must be 10 or 11 digits.',
             'contact_no.unique' => 'The contact number has already been taken.',
-            'unique' => 'The :attribute field has already been taken.',
-            'menstruation_status.required_if' => 'The menstruation status field is required for Feminine role.'
+            'unique' => 'The :attribute field has already been taken.'
         ]);
     }
-    
 
     /**
      * Create a new user instance after a valid registration.
