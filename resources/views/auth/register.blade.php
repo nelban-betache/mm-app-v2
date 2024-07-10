@@ -39,7 +39,7 @@
 }
 </style>
 </head>
-<body style="background-color: #f562b9">
+<body style="background-color: #FAE6E7;">
     <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
         <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
             <div class="d-flex align-items-center justify-content-center w-100 py-5">
@@ -191,19 +191,20 @@
 
                                             <div class="row">
                                                <div class="col-md-6 col-lg-6 col-sm-12 mb-4">
-                                                  <label for="role" class="form-label">Register As</label>
-                                                       <select class="form-control" name="role" id="role">
-                                                          <option value="" selected disabled>-- Select --</option>
-                                                          <option value="Health Worker">Health Worker</option>
-                                                          <option value="Feminine">Feminine</option>
-                                                       </select>
-                                                           @error('role')
-                                                            <span class="invalid-feedback">
-                                                               <strong>{{ $message }}</strong>
-                                                            </span>
-                                                          @enderror
-                                               </div>
+                                                 <label for="role" class="form-label">Register As</label>
+                                                   <select class="form-control" name="role" id="role">
+                                                     <option value="" selected disabled>-- Select --</option>
+                                                     <option value="Health Worker">Health Worker</option>
+                                                     <option value="Feminine">Feminine</option>
+                                                   </select>
+                                                   @if ($errors->has('role'))
+                                                        <span class="invalid-feedback">
+                                                            <strong>{{ $errors->first('role') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
                                             </div>
+
 
                                                   <!-- FEMININE -->
                                             <div id="menstruation-status-fields" style="display: none;">
@@ -238,7 +239,7 @@
                                                 <button type="submit" class="btn btn-primary py-2 fs-4 rounded-1"><i class="fa-regular fa-circle-check mr-1"></i> Confirm Registration</button>
                                             </div>
                                         </form>
-                                   @endauth
+                                    @endauth
                                 @endif
                             </div>
                         </div>
@@ -281,7 +282,7 @@
             input.value = phoneNumber;
         }
     </script>
- <script>
+    <script>
     document.addEventListener('DOMContentLoaded', function() {
         const roleSelect = document.getElementById('role');
         const menstruationFields = document.getElementById('menstruation-status-fields');
@@ -291,16 +292,15 @@
             const selectedRole = roleSelect.value;
             if (selectedRole === 'Feminine') {
                 menstruationFields.style.display = 'block';
-                menstruationStatusSelect.setAttribute('required', 'required');
+                // Reset menstruation status dropdown
+                menstruationStatusSelect.selectedIndex = 0;
             } else {
                 menstruationFields.style.display = 'none';
-                menstruationStatusSelect.removeAttribute('required');
-                menstruationStatusSelect.value = ''; // Clear value if not required
+                // Reset menstruation status dropdown
+                menstruationStatusSelect.selectedIndex = 0;
             }
         });
-
-        roleSelect.dispatchEvent(new Event('change')); // Trigger change event initially
     });
-</script>
+</script> 
 </body>
 </html>

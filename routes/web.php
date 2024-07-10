@@ -21,9 +21,6 @@ use App\Http\Controllers\ForgotPasswordController;
 Auth::routes();
 Route::view('/', 'auth/login')->name('login.page');
 
-Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('register', [RegisterController::class, 'register']);
-
 Route::get('forgot-password', [ForgotPasswordController::class, 'index']);
 Route::post('forgot-password', [ForgotPasswordController::class, 'postForgotPassword']);
 Route::get('reset-password/{token}', [ForgotPasswordController::class, 'getResetPassword']);
@@ -80,7 +77,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Health Worker Routes
-        Route::middleware(['role:health_worker'])->group(function () {
+    Route::middleware(['role:health_worker'])->group(function () {
         Route::get('health-worker/dashboard', [BarangayHealthWorkerController::class, 'index'])->name('health-worker.dashboard');
         
         Route::get('health-worker/feminine-list', [BarangayHealthWorkerController::class, 'feminineList']);
