@@ -37,26 +37,30 @@ class LoginController extends Controller
     public function login(Request $request) {
         $credentials = $request->only('password');
         $multi_user_field = filter_var($request->input('email'), FILTER_VALIDATE_EMAIL) ? 'email' : 'contact_no';
-
+    
         $credentials[$multi_user_field] = $request->input($multi_user_field);
-
+    
         if ($this->auth->attempt($credentials)) {
-
             $user = $this->auth->user();
-
+    
             if($user->user_role_id == 1) {
                 return redirect()->route('admin.dashboard');
             }
-            elseif($user->user_role_id == 3) {
-                return redirect()->route('health-worker.dashboard');
+            elseif($user->user_role_id == 3) {  // Health Worker
+                if($user->is_active == 1) {
+                    return redirect()->route('health-worker.dashboard');
+                } else {
+                    $this->logout($request);
+                    Session::flash('account-verification-error', 'Your account is not verified by the admin yet. Please come back later.');
+                    return redirect()->route('login.page');
+                }
             }
-            else {
+            else {  // Feminine user
                 if($user->is_active == 1) {
                     return redirect()->route('user.dashboard');
                 }
                 else {
                     $this->logout($request);
-
                     Session::flash('account-verification-error', 'Your account is not verified by the admin yet. Please come back later.');
                     return redirect()->route('login.page');
                 }
@@ -64,7 +68,6 @@ class LoginController extends Controller
         }
         else {
             $this->logout($request);
-
             Session::flash('login-error', 'Invalid user credential, please try again.');
             return redirect()->route('login.page');
         }

@@ -271,11 +271,7 @@ $(document).ready(function () {
 
         modal
             .find(".modal-body #view_is_active")
-            .text(button.data("is_active") === 1 ? "• Active" : "• Inactive");
-
-        modal
-            .find(".modal-body #view_is_verified")
-            .text(button.data("is_verified") === 1 ? "• Verified" : "• Unverified");
+            .text(button.data("is_active") === 1 ? "• Active" : "• Inactive");          
 
         var assigned_feminine_list = button.data("assigned_feminine_list");
         if (assigned_feminine_list.length != 0) {
@@ -456,6 +452,8 @@ $(document).ready(function () {
         }
     });
 
+    
+
     $(document).on("click", ".delete_record", function (e) {
         Swal.fire({
             title: "Are you sure?",
@@ -607,7 +605,6 @@ function verifyHealthWorker(userId) {
         }
     });
 }
-
 
 
 $("#newHealthWorkerModal").on("shown.bs.modal", function () {
