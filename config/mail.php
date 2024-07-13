@@ -40,8 +40,8 @@ return [
             'host' => 'smtp.gmail.com',
             'port' => env('MAIL_PORT', 587),
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'username' => 'mm.help.app@gmail.com',
-            'password' => 'bwhzyqudeaonxegm',
+            'username' => 'nelbanbetache@gmail.com',
+            'password' => 'mhpqpypfwqphxtof',
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
         ],
@@ -100,7 +100,7 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'name' => env('MAIL_FROM_NAME', 'Menstrual Monitoring App v2'),
     ],
 
     /*

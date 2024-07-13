@@ -37,7 +37,8 @@ class AdminController extends Controller {
     
         // Count of inactive users 
         $inactive_count = User::whereIn('user_role_id', [2, 3])->where('is_active', 0)->count();
-
+        $inactive_hw_count = User::whereIn('user_role_id', [3])->where('is_active', 0)->count();
+        $inactive_user_count = User::whereIn('user_role_id', [2])->where('is_active', 0)->count();
          // Count of unassign users 
         // $inactive_count = User::whereIn('user_role_id', [2, 3])->where('is_active', 0)->count();
     
@@ -48,7 +49,9 @@ class AdminController extends Controller {
             'total_period_per_year', 
             'health_worker_count', 
             'users_count', 
-            'inactive_count'
+            'inactive_count',
+            'inactive_hw_count',
+            'inactive_user_count'
             // 'unassign_count'
         ));
     }
@@ -63,7 +66,7 @@ class AdminController extends Controller {
         $pending_feminine_count = User::where('user_role_id', 2)->where('is_active', 0)->count();
 
         $data_response = [];
-        $category_arr = ['Active Period', 'Inactive Period', 'Pending (Not verify yet)'];
+        $category_arr = ['Active Period', 'Inactive Period', 'Pending Feminine (Not verify yet)'];
         foreach($category_arr as $category) {
             if($category === 'Active Period') {
                 if($active_feminine_count != 0) {
@@ -81,7 +84,7 @@ class AdminController extends Controller {
                     ];
                 }
             }
-            else if($category === 'Pending (Not verify yet)') {
+            else if($category === 'Pending Feminine (Not verify yet)') {
                 if($pending_feminine_count != 0) {
                     $data_response[] = [
                         'value' => $pending_feminine_count,

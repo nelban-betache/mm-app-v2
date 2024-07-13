@@ -48,8 +48,8 @@
                  <div class="icon">
                    <i class="fa-solid fa-users"></i>
                      </div>
-                      <a href="{{ URL::to('admin/account-settings') }}" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
+                      <!-- <a href="{{ URL::to('admin/account-settings') }}" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>-->
+                    </div> 
                 </div>
 
             <div class="col-lg-3 col-sm-6">
@@ -110,7 +110,32 @@
                  <div class="card-box bg-red shadow-sm">
                        <div class="inner">
                            <h3 id="inactive_count">{{$inactive_count}}</h3>
-                             <p>Not Verify</p>
+                             <p>Not Verified Users</p>
+                        </div>
+                 <div class="icon">
+                   <i class="fa-solid fa-user-slash"></i>
+                     </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-sm-6">
+                 <div class="card-box bg-red shadow-sm">
+                       <div class="inner">
+                           <h3 id="inactive_count">{{$inactive_hw_count}}</h3>
+                             <p>Not Verified Health Worker</p>
+                        </div>
+                 <div class="icon">
+                   <i class="fa-solid fa-user-slash"></i>
+                     </div>
+                      <a href="{{ URL::to('admin/health-worker') }}" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-sm-6">
+                 <div class="card-box bg-red shadow-sm">
+                       <div class="inner">
+                           <h3 id="inactive_count">{{$inactive_user_count}}</h3>
+                             <p>Not Verified Feminine</p>
                         </div>
                  <div class="icon">
                    <i class="fa-solid fa-user-slash"></i>
